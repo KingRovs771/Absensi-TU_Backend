@@ -1,6 +1,11 @@
 package Models
 
-import "time"
+import (
+	"time"
+
+	"github.com/google/uuid"
+	"gorm.io/gorm"
+)
 
 type TUUsers struct {
 	UsersId        int       `gorm:"primaryKey;AUTO_INCREMENT;uniqueIndex" json:"users_id"`
@@ -11,4 +16,15 @@ type TUUsers struct {
 	Password       string    `gorm:"type:varchar" json:"password"`
 	ProfilePicture string    `gorm:"type:text" json:"profile_picture"`
 	CreateAt       time.Time `gorm:"autoCreateTime" json:"create_at"`
+}
+
+func (users *TUUsers) BeforeSaveUsers(*gorm.DB) error {
+	UniqueID, err := uuid.NewRandom()
+	if err != nil {
+		return err
+	}
+
+	users.UserUID = UniqueID.String()
+
+	return nil
 }

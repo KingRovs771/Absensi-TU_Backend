@@ -3,8 +3,9 @@ package Controllers
 import (
 	"absensiTU-Backend/Database"
 	"absensiTU-Backend/Models"
-	"github.com/gin-gonic/gin"
 	"net/http"
+
+	"github.com/gin-gonic/gin"
 )
 
 func CreateRole(c *gin.Context) {
@@ -15,8 +16,9 @@ func CreateRole(c *gin.Context) {
 
 	if err := c.ShouldBindJSON(&input); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
-			"error":   err.Error(),
+			"Status" : "Error",
 			"Message": "Akses Ditolak Server",
+			"Error":   err.Error(),
 		})
 		return
 	}
@@ -28,8 +30,9 @@ func CreateRole(c *gin.Context) {
 
 	if err := Database.DB.Create(&role).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
-			"error":   err.Error(),
+			"Status" : "Error",
 			"Message": "Akses Ditolak Server",
+			"Error":   err.Error(),
 		})
 		return
 	}
@@ -68,7 +71,7 @@ func GetRoleById(c *gin.Context) {
 	}
 	c.JSON(http.StatusOK, gin.H{
 		"Status":  "Success",
-		"Message": "Role",
+		"Message": "Role berhasil didapatkan",
 		"Data":    role,
 	})
 }
@@ -77,22 +80,25 @@ func UpdateRole(c *gin.Context) {
 	var role Models.TURole
 	if err := Database.DB.First(&role, c.Param("role_uid")).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
-			"error":   err.Error(),
+			"Status" : "Error",
 			"Message": "Akses Ditolak Server",
+			"Error":   err.Error(),
 		})
 		return
 	}
 	if err := c.ShouldBindJSON(&role); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
-			"error":   err.Error(),
+			"Status" : "Error",
 			"Message": "Akses Ditolak Server",
+			"Error":   err.Error(),
 		})
 		return
 	}
 	if err := Database.DB.Save(&role).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
-			"error":   err.Error(),
+			"Status" : "Error", 
 			"Message": "Akses Ditolak Server",
+			"Error":   err.Error(),
 		})
 		return
 	}
@@ -107,16 +113,18 @@ func DeleteRole(c *gin.Context) {
 	var role Models.TURole
 	if err := Database.DB.Where("role_uid = ?", c.Param("role_uid")).First(&role).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
-			"error":   err.Error(),
+			"Status" : "Error",
 			"Message": "Akses Ditolak Server",
+			"Error":   err.Error(),
 		})
 		return
 	}
 
 	if err := Database.DB.Delete(&role).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
-			"error":   err.Error(),
+			"Status" : "Error",
 			"Message": "Akses Ditolak Server",
+			"Error":   err.Error(),
 		})
 		return
 	}
