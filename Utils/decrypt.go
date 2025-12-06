@@ -33,7 +33,7 @@ func GenerateJWTAdminTU(Users Models.TUUsers) (string, error) {
 	}
 
 	claims := CustomeClaimsJWT{
-		UsersUID: Users.UserUID,
+		UsersUID: Users.UsersUID,
 		RoleUID:  Users.RoleUID,
 		FullName: Users.FullName,
 		RegisteredClaims: jwt.RegisteredClaims{
@@ -45,7 +45,6 @@ func GenerateJWTAdminTU(Users Models.TUUsers) (string, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	return token.SignedString([]byte(jwtSecret))
 }
-
 
 func getTokenFromRequest(c *gin.Context) string {
 	bearerToken := c.Request.Header.Get("Authorization")

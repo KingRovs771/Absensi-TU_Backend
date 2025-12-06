@@ -10,13 +10,12 @@ import (
 
 func CreateRole(c *gin.Context) {
 	var input struct {
-		RoleUID  string `json:"role_uid" binding:"required"`
 		NameRole string `json:"name_role"`
 	}
 
 	if err := c.ShouldBindJSON(&input); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
-			"Status" : "Error",
+			"Status":  "Error",
 			"Message": "Akses Ditolak Server",
 			"Error":   err.Error(),
 		})
@@ -24,13 +23,12 @@ func CreateRole(c *gin.Context) {
 	}
 
 	role := Models.TURole{
-		RoleUID:  input.RoleUID,
 		NameRole: input.NameRole,
 	}
 
 	if err := Database.DB.Create(&role).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
-			"Status" : "Error",
+			"Status":  "Error",
 			"Message": "Akses Ditolak Server",
 			"Error":   err.Error(),
 		})
@@ -50,6 +48,13 @@ func GetAllRoles(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"error":   err.Error(),
 			"Message": "Akses Ditolak Server",
+		})
+		return
+	}
+	if len(roles) == 0 {
+		c.JSON(http.StatusNotFound, gin.H{
+			"Status":  "Error",
+			"Message": "Role Not Found",
 		})
 		return
 	}
@@ -80,7 +85,7 @@ func UpdateRole(c *gin.Context) {
 	var role Models.TURole
 	if err := Database.DB.First(&role, c.Param("role_uid")).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
-			"Status" : "Error",
+			"Status":  "Error",
 			"Message": "Akses Ditolak Server",
 			"Error":   err.Error(),
 		})
@@ -88,7 +93,7 @@ func UpdateRole(c *gin.Context) {
 	}
 	if err := c.ShouldBindJSON(&role); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
-			"Status" : "Error",
+			"Status":  "Error",
 			"Message": "Akses Ditolak Server",
 			"Error":   err.Error(),
 		})
@@ -96,7 +101,7 @@ func UpdateRole(c *gin.Context) {
 	}
 	if err := Database.DB.Save(&role).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
-			"Status" : "Error", 
+			"Status":  "Error",
 			"Message": "Akses Ditolak Server",
 			"Error":   err.Error(),
 		})
@@ -113,7 +118,7 @@ func DeleteRole(c *gin.Context) {
 	var role Models.TURole
 	if err := Database.DB.Where("role_uid = ?", c.Param("role_uid")).First(&role).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
-			"Status" : "Error",
+			"Status":  "Error",
 			"Message": "Akses Ditolak Server",
 			"Error":   err.Error(),
 		})
@@ -122,7 +127,7 @@ func DeleteRole(c *gin.Context) {
 
 	if err := Database.DB.Delete(&role).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
-			"Status" : "Error",
+			"Status":  "Error",
 			"Message": "Akses Ditolak Server",
 			"Error":   err.Error(),
 		})
